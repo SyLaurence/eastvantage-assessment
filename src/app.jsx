@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
-import MainPage from './components/pages/mainPage'
+import MainPage from './pages/mainPage'
 
 ReactDOM.createRoot(document.getElementById('app')).render(
     <MainPage />
