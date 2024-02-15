@@ -1,45 +1,55 @@
 import React, { useEffect, useState } from 'react'
-import Axios from 'axios'
-import USER_INFO_URL from '../utils/constants'
+import { RESULTS } from '../utils/constants'
+import fetchUserData from '../api/user'
+import '../assets/css/user-section.css'
 
 export default function userSectionComponent() {
 
+  // State for User Info
   const [ results, setResults ] = useState([])
+  const [ loading, setLoading ] = useState(true)
 
-  const fetchUserData = async () => {
-    const { data: { results } } = await Axios.get(USER_INFO_URL)
-    .then(response => {
-      // clear local storage
-      return response
-    })
-    .catch(error => {
-      // handle error
-      console.log(error);
-    })
-    .finally(() => {
-      // always executed
-      // loading false?
-      // set local storage
-    });
-    setResults(results)
+  // Fires an API call to get new user data
+  const getUser = async () => {
+
+    // Initialize loading state
+    setLoading(true)
+
+    // Remove data from local storage to refresh
+    localStorage.removeItem(RESULTS);
+    
+    await fetchUserData()
+      .then( response => {
+        setResults(response)
+        // Add results to local storage
+        localStorage.setItem(RESULTS, JSON.stringify(response));
+      })
+      .finally(() => {
+        // End loading state 
+        setLoading(false) 
+      })
+
   }
 
+  // Populate user info once component is mounted
   useEffect(() => {
-    fetchUserData()
+    getUser()
   }, [])
 
   return (
-    <section>
-      { results.map(({ name: { title, first, last }, email }) => {
+    <section className='user-section'>
+      { results.map(({ name: { title, first, last }, email }, index) => {
         return (
-          <div>
-            <label>Name: </label> { title } { first } { last }
+          <div key={ index }>
+            <label>Name: </label> { loading ? '...' : `${ title } ${ first } ${ last }` }
             <br />
-            <label>Email: </label> { email }
+            <label>Email: </label> { loading ? '...' : email }
           </div>
         )
       }) }
-      <button onClick={ fetchUserData }>Refresh</button>
+      <div className='refresh-section'>
+        <button className={ `btn-refresh ${ loading ? 'disabled' : ''}` } disabled={ loading } onClick={ getUser }>Refresh</button>
+      </div>
     </section>
   )
 }

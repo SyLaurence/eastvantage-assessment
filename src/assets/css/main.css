@@ -1,0 +1,10 @@
+body {
+    background-color: rgb(14, 71, 121);
+}
+
+.main-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
