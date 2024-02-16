@@ -7,7 +7,7 @@ export default function userSectionComponent() {
 
   // State for User Info
   const [ results, setResults ] = useState([])
-  const [ loading, setLoading ] = useState(true)
+  const [ loading, setLoading ] = useState(false)
 
   // Fires an API call to get new user data
   const getUser = async () => {
@@ -20,9 +20,13 @@ export default function userSectionComponent() {
     
     await fetchUserData()
       .then( response => {
-        setResults(response)
+
+        const { data: { results } } = response
+
+        setResults(results)
+        
         // Add results to local storage
-        localStorage.setItem(RESULTS, JSON.stringify(response));
+        localStorage.setItem(RESULTS, JSON.stringify(results));
       })
       .finally(() => {
         // End loading state 
@@ -33,7 +37,11 @@ export default function userSectionComponent() {
 
   // Populate user info once component is mounted
   useEffect(() => {
-    getUser()
+    if (localStorage.getItem(RESULTS) === null) {
+      getUser()
+    } else {
+      setResults(JSON.parse(localStorage.getItem(RESULTS)))
+    }
   }, [])
 
   return (

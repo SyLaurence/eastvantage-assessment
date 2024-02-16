@@ -29,4 +29,5 @@
 .disabled {
     color: #d1c5c5;
     background-color: rgb(22 117 153);
+    cursor: initial;
 }
