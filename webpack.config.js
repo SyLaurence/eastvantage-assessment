@@ -6,7 +6,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, "dist"),
         filename: "index_bundle.js",
-        publicPath: "/"
+        publicPath: "./"
     },
     module: {
         rules: [
@@ -18,7 +18,9 @@ module.exports = {
     resolve: {
         extensions: [".jsx", "..."]
     },
-    mode: 'development',
+    mode: process.env.NODE_ENV === 'production' 
+    ? 'production' 
+    : 'development',
     plugins: [
         new HtmlWebpackPlugin({
             template: "src/index.html"
