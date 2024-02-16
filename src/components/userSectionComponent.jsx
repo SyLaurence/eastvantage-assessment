@@ -44,9 +44,6 @@ export default function userSectionComponent() {
     }
   }, [])
 
-  
-  console.log()
-
   return (
     <section className='user-section'>
       { results.map(({ name: { title, first, last }, email }, index) => {
